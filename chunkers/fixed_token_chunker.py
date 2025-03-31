@@ -83,9 +83,9 @@ class TextSplitter(BaseChunker, ABC):
         docs = []
         current_doc: List[str] = []
         total = 0
-        for d in splits:
-            _len = self._length_function(d)
-            if (
+        for d in splits: # list of tokens
+            _len = self._length_function(d) # length of the new token
+            if (  # if the current chunk + the new token + the separator is longer than the chunk size
                 total + _len + (separator_len if len(current_doc) > 0 else 0)
                 > self._chunk_size
             ):
@@ -94,7 +94,7 @@ class TextSplitter(BaseChunker, ABC):
                         f"Created a chunk of size {total}, "
                         f"which is longer than the specified {self._chunk_size}"
                     )
-                if len(current_doc) > 0:
+                if len(current_doc) > 0: # if the current chunk is not empty
                     doc = self._join_docs(current_doc, separator)
                     if doc is not None:
                         docs.append(doc)
@@ -110,33 +110,12 @@ class TextSplitter(BaseChunker, ABC):
                             separator_len if len(current_doc) > 1 else 0
                         )
                         current_doc = current_doc[1:]
-            current_doc.append(d)
-            total += _len + (separator_len if len(current_doc) > 1 else 0)
-        doc = self._join_docs(current_doc, separator)
+            current_doc.append(d) # add the new token to the current chunk
+            total += _len + (separator_len if len(current_doc) > 1 else 0) # update the total length of the current chunk
+        doc = self._join_docs(current_doc, separator) # join the current chunk with the separator
         if doc is not None:
             docs.append(doc)
         return docs
-
-    # @classmethod
-    # def from_huggingface_tokenizer(cls, tokenizer: Any, **kwargs: Any) -> TextSplitter:
-    #     """Text splitter that uses HuggingFace tokenizer to count length."""
-    #     try:
-    #         from transformers import PreTrainedTokenizerBase
-
-    #         if not isinstance(tokenizer, PreTrainedTokenizerBase):
-    #             raise ValueError(
-    #                 "Tokenizer received was not an instance of PreTrainedTokenizerBase"
-    #             )
-
-    #         def _huggingface_tokenizer_length(text: str) -> int:
-    #             return len(tokenizer.encode(text))
-
-    #     except ImportError:
-    #         raise ValueError(
-    #             "Could not import transformers python package. "
-    #             "Please install it with `pip install transformers`."
-    #         )
-    #     return cls(length_function=_huggingface_tokenizer_length, **kwargs)
 
     @classmethod
     def from_tiktoken_encoder(

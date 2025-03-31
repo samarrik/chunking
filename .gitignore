@@ -1,3 +1,14 @@
+# Unstaged database files
+data/db/
+
+# Testing and experimentation files
+experiments.ipynb
+
+# Reports
+reports/*
+!reports/src
+!reports/report.pdf
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
