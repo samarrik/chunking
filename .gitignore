@@ -1,3 +1,6 @@
+# Hydra files
+outputs/
+
 # Unstaged database files
 data/db/
 
@@ -6,7 +9,7 @@ experiments.ipynb
 
 # Reports
 reports/*
-!reports/src
+!reports/results
 !reports/report.pdf
 
 # Byte-compiled / optimized / DLL files

@@ -1,0 +1,27 @@
+database:
+  path: data/db
+
+corpus:
+  path: data/corpora/wikitexts.md
+
+queries:
+  path: data/queries.csv
+
+results:
+  data_path: reports/results/data
+  figures_path: reports/results/figures
+
+experiments:
+  embedding_function: all-MiniLM-L6-v2
+  chunk_sizes:
+    - 200
+    - 400
+    - 600
+    - 800
+  halfway_overlap:
+    - True
+    - False
+  retrived_chunks_nums:
+    - 3
+    - 5
+    - 10
