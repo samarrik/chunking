@@ -1,3 +1,80 @@
+- chunk_size: 100
+  chunk_overlap: 50
+  retrieve_count: 1
+  metrics:
+    iou: 0.19276063005403168
+    precision: 0.21871545268081757
+    recall: 0.42824496203322354
+- chunk_size: 100
+  chunk_overlap: 50
+  retrieve_count: 3
+  metrics:
+    iou: 0.13171262547485904
+    precision: 0.13788735068483898
+    recall: 0.6326920544702186
+- chunk_size: 100
+  chunk_overlap: 50
+  retrieve_count: 5
+  metrics:
+    iou: 0.09671296305763538
+    precision: 0.09897052019238488
+    recall: 0.719583285264085
+- chunk_size: 100
+  chunk_overlap: 50
+  retrieve_count: 7
+  metrics:
+    iou: 0.07589863468118398
+    precision: 0.07709385576839596
+    recall: 0.7495827747463727
+- chunk_size: 100
+  chunk_overlap: 50
+  retrieve_count: 9
+  metrics:
+    iou: 0.06566335972953913
+    precision: 0.06637692566481522
+    recall: 0.7975373709051373
+- chunk_size: 100
+  chunk_overlap: 0
+  retrieve_count: 1
+  metrics:
+    iou: 0.16282239071331428
+    precision: 0.1899049480231582
+    recall: 0.3730429017204919
+- chunk_size: 100
+  chunk_overlap: 0
+  retrieve_count: 3
+  metrics:
+    iou: 0.08761407866522455
+    precision: 0.09175846967782197
+    recall: 0.5314646018830737
+- chunk_size: 100
+  chunk_overlap: 0
+  retrieve_count: 5
+  metrics:
+    iou: 0.07038396035904275
+    precision: 0.07206875517608763
+    recall: 0.6679003983379546
+- chunk_size: 100
+  chunk_overlap: 0
+  retrieve_count: 7
+  metrics:
+    iou: 0.05705758828024159
+    precision: 0.057806263360829585
+    recall: 0.7182432190074254
+- chunk_size: 100
+  chunk_overlap: 0
+  retrieve_count: 9
+  metrics:
+    iou: 0.04716115115060157
+    precision: 0.0476183363042286
+    recall: 0.7606693370730342
+- chunk_size: 200
+  chunk_overlap: 100
+  retrieve_count: 1
+  metrics:
+    iou: 0.119505731103414
+    precision: 0.126799039508681
+    recall: 0.46718170931549047
 - chunk_size: 200
   chunk_overlap: 100
   retrieve_count: 3
@@ -28,6 +105,13 @@
     recall: 0.8564568346616319
 - chunk_size: 200
   chunk_overlap: 0
+  retrieve_count: 1
+  metrics:
+    iou: 0.11060054337617045
+    precision: 0.11638624989001917
+    recall: 0.43059540537100677
+- chunk_size: 200
+  chunk_overlap: 0
   retrieve_count: 3
   metrics:
     iou: 0.06426501552944705
@@ -54,6 +138,13 @@
     iou: 0.028991660880292456
     precision: 0.02905524591627029
     recall: 0.8954651755843499
+- chunk_size: 400
+  chunk_overlap: 200
+  retrieve_count: 1
+  metrics:
+    iou: 0.08249872817863672
+    precision: 0.08349331787830758
+    recall: 0.5849523124839409
 - chunk_size: 400
   chunk_overlap: 200
   retrieve_count: 3
@@ -84,6 +175,13 @@
     recall: 0.9461704214005885
 - chunk_size: 400
   chunk_overlap: 0
+  retrieve_count: 1
+  metrics:
+    iou: 0.06370711264695184
+    precision: 0.06472540218868088
+    recall: 0.4585297546848075
+- chunk_size: 400
+  chunk_overlap: 0
   retrieve_count: 3
   metrics:
     iou: 0.033215327229227536
@@ -110,6 +208,13 @@
     iou: 0.015827615471511007
     precision: 0.015836436328544992
     recall: 0.9473102196522069
+- chunk_size: 600
+  chunk_overlap: 300
+  retrieve_count: 1
+  metrics:
+    iou: 0.05256729696546687
+    precision: 0.05292227883968332
+    recall: 0.5524209143193932
 - chunk_size: 600
   chunk_overlap: 300
   retrieve_count: 3
@@ -140,6 +245,13 @@
     recall: 0.9979973696795792
 - chunk_size: 600
   chunk_overlap: 0
+  retrieve_count: 1
+  metrics:
+    iou: 0.029700016002547916
+    precision: 0.029889036207969098
+    recall: 0.354090204590756
+- chunk_size: 600
+  chunk_overlap: 0
   retrieve_count: 3
   metrics:
     iou: 0.022227495984897556
@@ -166,6 +278,13 @@
     iou: 0.010983151984460588
     precision: 0.010983480501021116
     recall: 0.9493779463199513
+- chunk_size: 800
+  chunk_overlap: 400
+  retrieve_count: 1
+  metrics:
+    iou: 0.03925801580250183
+    precision: 0.039547555733415826
+    recall: 0.5460834537401228
 - chunk_size: 800
   chunk_overlap: 400
   retrieve_count: 3
@@ -196,6 +315,13 @@
     recall: 0.9636757123803841
 - chunk_size: 800
   chunk_overlap: 0
+  retrieve_count: 1
+  metrics:
+    iou: 0.02940240241769499
+    precision: 0.029567009032667586
+    recall: 0.37434847934922044
+- chunk_size: 800
+  chunk_overlap: 0
   retrieve_count: 3
   metrics:
     iou: 0.017060158950846196
@@ -224,6 +350,13 @@
     recall: 0.9027254745557324
 - chunk_size: 1000
   chunk_overlap: 500
+  retrieve_count: 1
+  metrics:
+    iou: 0.030472853301158995
+    precision: 0.030655869290647786
+    recall: 0.5212919884602185
+- chunk_size: 1000
+  chunk_overlap: 500
   retrieve_count: 3
   metrics:
     iou: 0.018925885292389685
@@ -250,6 +383,13 @@
     iou: 0.010245827063366082
     precision: 0.010245962895950445
     recall: 0.9901320115736174
+- chunk_size: 1000
+  chunk_overlap: 0
+  retrieve_count: 1
+  metrics:
+    iou: 0.023502428628150933
+    precision: 0.023627478316442532
+    recall: 0.39456883034954754
 - chunk_size: 1000
   chunk_overlap: 0
   retrieve_count: 3

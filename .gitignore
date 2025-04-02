@@ -2,10 +2,10 @@
 outputs/
 
 # Unstaged database files
-# data/db/
+data/db
 
 # Reports
-reports/*
+reports/
 !reports/results
 !reports/report.pdf
 

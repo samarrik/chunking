@@ -24,7 +24,7 @@ class Results:
 
 @dataclass
 class Experiments:
-    embedding_function: str
+    embedding_function_name: str
     chunk_sizes: List[int]
     halfway_overlap: List[bool]
     retrieve_count: List[int]

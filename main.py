@@ -41,6 +41,7 @@ def main(cfg: Config) -> None:
         corpus_path=Path(cfg.corpus.path),
         queries_path=Path(cfg.queries.path),
         results_data_path=Path(cfg.results.data_path),
+        embedding_function_name=cfg.experiments.embedding_function_name
     )
 
     # Generate experimental setups from the config
@@ -59,11 +60,11 @@ def main(cfg: Config) -> None:
     # Prepare embedding function
     try:
         embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
-            model_name=cfg.experiments.embedding_function
+            model_name=experimenter.embedding_function_name
         )
     except Exception as e:
         print(
-            f"Error loading embedding function: {cfg.experiments.embedding_function} - {e}"
+            f"Error loading embedding function: {experimenter.embedding_function_name} - {e}"
         )
         raise
 

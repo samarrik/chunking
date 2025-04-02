@@ -12,7 +12,7 @@ from chromadb.api.models.Collection import Collection
 from chromadb.utils import embedding_functions
 
 from chunking_experimentation.chunkers import FixedTokenChunker
-from chunking_experimentation.evaluation import (
+from chunking_experimentation.ranges import (
     intersect_ranges,
     sum_of_ranges,
     union_ranges,
@@ -38,10 +38,12 @@ class Experimenter:
         corpus_path: Path,
         queries_path: Path,
         results_data_path: Path,
+        embedding_function_name: str
     ):
         self.corpus_path = corpus_path
         self.queries_path = queries_path
         self.results_data_path = results_data_path
+        self.embedding_function_name = embedding_function_name
 
         # Clear the results if present
         if self.results_data_path.exists:
@@ -118,7 +120,7 @@ class Experimenter:
         """Create and populate collections for chunks and queries."""
         # Create & populate the collection of chunks
         chunk_collection = self.client.get_or_create_collection(
-            name=f"{self.corpus_path.stem}_{chunker._chunk_size}_{chunker._chunk_overlap}",
+            name=f"{self.corpus_path.stem}_{self.embedding_function_name}_{chunker._chunk_size}_{chunker._chunk_overlap}",
             embedding_function=embedding_function,
         )
         if len(chunk_collection.get()["ids"]) == 0:
@@ -129,7 +131,7 @@ class Experimenter:
         # Create & populate the collection of queries
         queries_collection_name = self.queries_path.stem
         queries_collection = self.client.get_or_create_collection(
-            name=queries_collection_name, embedding_function=embedding_function
+            name=f"{queries_collection_name}_{self.embedding_function_name}", embedding_function=embedding_function
         )
         if len(queries_collection.get()["ids"]) == 0:
             queries, metas_q = self._load_queries()
