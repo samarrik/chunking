@@ -1,5 +1,4 @@
 import json
-import shutil
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
@@ -7,7 +6,6 @@ from typing import Any, Dict, List, Tuple
 import chromadb
 import numpy as np
 import pandas as pd
-import yaml
 from chromadb.api.models.Collection import Collection
 from chromadb.utils import embedding_functions
 
