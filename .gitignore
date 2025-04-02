@@ -2,10 +2,7 @@
 outputs/
 
 # Unstaged database files
-data/db/
-
-# Testing and experimentation files
-experiments.ipynb
+# data/db/
 
 # Reports
 reports/*

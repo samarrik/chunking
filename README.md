@@ -1,15 +1,41 @@
 # Chunking Methods Experimentation
 
-## Usage
-*This project uses `uv` package manager - [install first](https://docs.astral.sh/uv/getting-started/installation/)*
+A simple framework for evaluation of text chunking strategies in IR systems.
 
-Run the code:
+## Prerequisites
+- [UV package manager](https://docs.astral.sh/uv/getting-started/installation/)
+
+## Installation
+Clone the repo and open it
+```bash
+git clone https://github.com/samarrik/chunking.git
+cd chunking
+```
+
+## Usage
+
+### Running Experiments
+
+Execute the main experiment suite *(take cares of the env)*:
 ```bash
 uv run main.py
 ```
 
-## Data
-The evaluation data has been taken from [1].
+### Configuration
+
+Experiment parameters can be configured in `configs/config.yaml`. Available parameters include:
+- Chunk sizes
+- Overlap strategies
+- Number of retrieved chunks
+- Embedding model selection
+
+### Results
+
+- Experiment results are saved in the `results` directory
+- Detailed report available in `reports/report.pdf`
+
+## Citation
+The evaluation dataset, chunkers, and some simple utils are sourced from the Chroma research team's chunking evaluation framework [1].
 
 ## References
 
