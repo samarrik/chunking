@@ -41,7 +41,6 @@ def main(cfg: Config) -> None:
         corpus_path=Path(cfg.corpus.path),
         queries_path=Path(cfg.queries.path),
         results_data_path=Path(cfg.results.data_path),
-        results_figures_path=Path(cfg.results.figures_path),
     )
 
     # Generate experimental setups from the config
