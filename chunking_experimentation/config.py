@@ -20,7 +20,6 @@ class Queries:
 @dataclass
 class Results:
     data_path: str
-    figures_path: str
 
 
 @dataclass
@@ -28,7 +27,7 @@ class Experiments:
     embedding_function: str
     chunk_sizes: List[int]
     halfway_overlap: List[bool]
-    retrived_chunks_nums: List[int]
+    retrieve_count: List[int]
 
 
 @dataclass
