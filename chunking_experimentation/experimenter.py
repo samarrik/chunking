@@ -22,6 +22,8 @@ from chunking_experimentation.utils import rigorous_document_search
 
 @dataclass
 class ExperimentResult:
+    corpus: str
+    embedding_function: str
     chunk_size: int
     chunk_overlap: int
     retrieve_count: int
@@ -45,11 +47,6 @@ class Experimenter:
         self.results_data_path = results_data_path
         self.embedding_function_name = embedding_function_name
 
-        # Clear the results if present
-        if self.results_data_path.exists:
-            shutil.rmtree(self.results_data_path)
-        self.results_data_path.mkdir(parents=True, exist_ok=True)
-
         self.client = chromadb.PersistentClient(path=str(database_path))
 
     def conduct_experiment(
@@ -68,6 +65,8 @@ class Experimenter:
         )
 
         result = ExperimentResult(
+            corpus=self.corpus_path.stem,
+            embedding_function=self.embedding_function_name,
             chunk_size=chunker._chunk_size,
             chunk_overlap=chunker._chunk_overlap,
             retrieve_count=retrieve_count,
@@ -81,36 +80,30 @@ class Experimenter:
         return result
 
     def _save_result(self, result: ExperimentResult) -> None:
-        """Save experiment result to YAML file."""
+        """Save experiment result to CSV file, appending new results."""
         self.results_data_path.mkdir(parents=True, exist_ok=True)
-        output_file = self.results_data_path / "output.yaml"
+        output_file = self.results_data_path / "results.csv"
 
-        result_dict = {
+        # Flatten the result into a single row dictionary
+        result_row = {
+            "corpus": result.corpus,
+            "embedding_function": result.embedding_function,
             "chunk_size": result.chunk_size,
             "chunk_overlap": result.chunk_overlap,
             "retrieve_count": result.retrieve_count,
-            "metrics": {
-                "iou": result.iou,
-                "precision": result.precision,
-                "recall": result.recall,
-            },
+            "iou": result.iou,
+            "precision": result.precision,
+            "recall": result.recall,
         }
 
-        # Load existing results and append the fresh ones
-        results = []
-        if output_file.exists():
-            with open(output_file, "r") as f:
-                results = yaml.safe_load(f) or []
-        results.append(result_dict)
+        # Convert to DataFrame
+        df_new = pd.DataFrame([result_row])
 
-        # Write results with improved formatting
-        with open(output_file, "w") as f:
-            yaml.dump(
-                results,
-                f,
-                sort_keys=False,  # keeps the order of the els the same
-                indent=2,
-            )
+        # If file exists, append; if not, create new
+        if output_file.exists():
+            df_new.to_csv(output_file, mode='a', header=False, index=False)
+        else:
+            df_new.to_csv(output_file, mode='w', header=True, index=False)
 
     def _compose_collections(
         self,
