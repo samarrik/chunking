@@ -34,8 +34,7 @@ cs.store(name="config", node=Config)
 
 @hydra.main(config_path="configs", config_name="config", version_base="1.3")
 def main(cfg: Config) -> None:
-    """Orchestrator of the experiments"""
-    # Initialize the Experimenter
+    """Run chunking experiments with configurations from Hydra."""
     experimenter = Experimenter(
         database_path=Path(cfg.database.path),
         corpus_path=Path(cfg.corpus.path),
@@ -44,7 +43,7 @@ def main(cfg: Config) -> None:
         embedding_function_name=cfg.experiments.embedding_function_name
     )
 
-    # Generate experimental setups from the config
+    # Create all possible combinations of experimental parameters
     experimental_setups = list(
         product(
             cfg.experiments.chunk_sizes,
@@ -57,7 +56,7 @@ def main(cfg: Config) -> None:
         f"[bold green]Running {len(experimental_setups)} experiments[/bold green]"
     )
 
-    # Prepare embedding function
+    # Initialize embedding function for all experiments
     try:
         embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
             model_name=experimenter.embedding_function_name

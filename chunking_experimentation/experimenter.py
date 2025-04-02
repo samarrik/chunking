@@ -22,6 +22,7 @@ from chunking_experimentation.utils import rigorous_document_search
 
 @dataclass
 class ExperimentResult:
+    """Structured container for storing experiment results and parameters."""
     corpus: str
     embedding_function: str
     chunk_size: int
@@ -55,7 +56,7 @@ class Experimenter:
         embedding_function: embedding_functions.SentenceTransformerEmbeddingFunction,
         retrieve_count: int,
     ) -> ExperimentResult:
-        """Conduct a single experiment with the given parameters and return results."""
+        """Run a single chunking experiment with given parameters."""
         chunk_collection, queries_collection = self._compose_collections(
             chunker, embedding_function
         )
@@ -76,15 +77,13 @@ class Experimenter:
         )
 
         self._save_result(result)
-
         return result
 
     def _save_result(self, result: ExperimentResult) -> None:
-        """Save experiment result to CSV file, appending new results."""
+        """Append experiment result to CSV file, creating it if doesn't exist."""
         self.results_data_path.mkdir(parents=True, exist_ok=True)
         output_file = self.results_data_path / "results.csv"
 
-        # Flatten the result into a single row dictionary
         result_row = {
             "corpus": result.corpus,
             "embedding_function": result.embedding_function,
@@ -96,7 +95,6 @@ class Experimenter:
             "recall": result.recall,
         }
 
-        # Convert to DataFrame
         df_new = pd.DataFrame([result_row])
 
         # If file exists, append; if not, create new
@@ -110,8 +108,8 @@ class Experimenter:
         chunker: FixedTokenChunker,
         embedding_function: embedding_functions.SentenceTransformerEmbeddingFunction,
     ) -> Tuple[Collection, Collection]:
-        """Create and populate collections for chunks and queries."""
-        # Create & populate the collection of chunks
+        """Create or retrieve collections for chunks and queries, populating if empty."""
+        # Unique collection name includes all parameters to avoid mixing data
         chunk_collection = self.client.get_or_create_collection(
             name=f"{self.corpus_path.stem}_{self.embedding_function_name}_{chunker._chunk_size}_{chunker._chunk_overlap}",
             embedding_function=embedding_function,
@@ -121,10 +119,9 @@ class Experimenter:
             ids = [str(i) for i in range(len(chunks))]
             chunk_collection.upsert(documents=chunks, metadatas=metas_c, ids=ids)
 
-        # Create & populate the collection of queries
-        queries_collection_name = self.queries_path.stem
         queries_collection = self.client.get_or_create_collection(
-            name=f"{queries_collection_name}_{self.embedding_function_name}", embedding_function=embedding_function
+            name=f"{self.queries_path.stem}_{self.embedding_function_name}",
+            embedding_function=embedding_function
         )
         if len(queries_collection.get()["ids"]) == 0:
             queries, metas_q = self._load_queries()
@@ -136,11 +133,10 @@ class Experimenter:
     def _chunk_corpus(
         self, corpus_path: Path, chunker: FixedTokenChunker
     ) -> Tuple[List[str], List[Dict[str, int]]]:
-        """Chunk a corpus and generate metadata."""
+        """Split corpus into chunks and generate position metadata for each chunk."""
         with open(corpus_path, "r", encoding="utf-8") as f:
             text = f.read()
         
-        # Conduct chinking and get metadata
         chunks = chunker.split_text(text)
         metas = []
         for chunk in chunks:
@@ -150,13 +146,12 @@ class Experimenter:
         return chunks, metas
 
     def _load_queries(self) -> Tuple[List[str], List[Dict[str, Any]]]:
-        """Load and parse queries from CSV file."""
+        """Load queries and their reference ranges from CSV file."""
         df = pd.read_csv(self.queries_path)
         filtered = df.loc[
             df["corpus_id"] == self.corpus_path.stem, ["question", "references"]
         ]
 
-        # Get queries and metadata - (unparsed references)
         queries, metas = [], []
         for _, row in filtered.iterrows():
             queries.append(row["question"])
@@ -170,35 +165,36 @@ class Experimenter:
         queries_collection: Collection,
         retrieve_count: int,
     ) -> Tuple[float, float, float]:
-        """Compute evaluation metrics for the given collections."""
+        """Calculate IoU, precision, and recall metrics for retrieved chunks."""
         queries_data = queries_collection.get(
             include=["documents", "embeddings", "metadatas"]
         )
         retrievals = chunk_collection.query(
-            query_embeddings=queries_data["embeddings"], n_results=retrieve_count
+            query_embeddings=queries_data["embeddings"], 
+            n_results=retrieve_count
         )
 
-        # Process each queries
         all_metrics = []
         for idx in range(len(queries_data["embeddings"])):
-            # Get reference ranges
+            # Parse reference ranges from query metadata
             references = json.loads(queries_data["metadatas"][idx]["references"])
             ref_ranges = [
                 (int(ref["start_index"]), int(ref["end_index"])) for ref in references
             ]
             ref_ranges = union_ranges(ref_ranges)
 
-            # Get retrieved chunk ranges
             retrieved_meta = retrievals["metadatas"][idx]
             if not retrieved_meta:
-                all_metrics.append((0, 0, 0))  # iou, precision, recall
+                all_metrics.append((0, 0, 0))
                 continue
+
+            # Get ranges of retrieved chunks and merge overlapping ones
             chunk_ranges = [
                 (meta["start_index"], meta["end_index"]) for meta in retrieved_meta
             ]
             chunk_ranges = union_ranges(chunk_ranges)
 
-            # Find intersections
+            # Find all intersections between reference and retrieved ranges
             intersections = [
                 inter
                 for cr in chunk_ranges
@@ -210,14 +206,13 @@ class Experimenter:
                 all_metrics.append((0, 0, 0))
                 continue
 
+            # Calculate overlap metrics
             inter_union = union_ranges(intersections)
             inter_length = sum_of_ranges(inter_union)
-
             retrieved_length = sum_of_ranges(chunk_ranges)
             ref_length = sum_of_ranges(ref_ranges)
             union_length = retrieved_length + ref_length - inter_length
 
-            # Calculate metrics
             precision = inter_length / retrieved_length if retrieved_length > 0 else 0
             recall = inter_length / ref_length if ref_length > 0 else 0
             iou = inter_length / union_length if union_length > 0 else 0
@@ -227,6 +222,5 @@ class Experimenter:
         if not all_metrics:
             return 0, 0, 0
 
-        # Reform and get means
         iou_values, precision_values, recall_values = zip(*all_metrics)
         return (np.mean(iou_values), np.mean(precision_values), np.mean(recall_values))
