@@ -44,10 +44,9 @@ class Experimenter:
         self.results_data_path = results_data_path
 
         # Clear the results if present
-        for folder in (self.results_data_path, self.results_figures_path):
-            if folder.exists:
-                shutil.rmtree(folder)
-            folder.mkdir(parents=True, exist_ok=True)
+        if self.results_data_path.exists:
+            shutil.rmtree(self.results_data_path)
+        self.results_data_path.mkdir(parents=True, exist_ok=True)
 
         self.client = chromadb.PersistentClient(path=str(database_path))
 
