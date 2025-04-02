@@ -5,8 +5,7 @@ outputs/
 data/db/
 
 # Reports
-reports/
-!reports/results
+reports/report.*
 !reports/report.pdf
 
 # Byte-compiled / optimized / DLL files

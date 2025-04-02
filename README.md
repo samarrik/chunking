@@ -32,7 +32,9 @@ Experiment parameters can be configured in `configs/config.yaml`. Available para
 ### Results
 
 - Detailed report available in `reports/report.pdf`
-- Experiment results are saved in the `results` directory
+- Experiment results are saved in the `results` directory: 
+    - Actual data from the experiments `results/data/results.csv`
+    - Figures depicting data from the experiments `results/figures/`
 
 ## Citation
 The evaluation dataset, chunkers, and some simple utils are sourced from the Chroma research team's chunking evaluation framework [1].
