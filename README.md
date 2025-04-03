@@ -1,9 +1,9 @@
 # Chunking Methods Experimentation
 
-A simple, cross-platform framework for evaluation of text chunking strategies in IR systems.
+A simple, cross-platform suite for evaluation of text chunking strategies in IR systems.
 
 ## Prerequisites
-- [UV package manager](https://docs.astral.sh/uv/getting-started/installation/)
+- Install [uv package manager](https://docs.astral.sh/uv/getting-started/installation/) for your platform
 
 ## Installation
 Clone the repo and open it
@@ -37,7 +37,7 @@ Experiment parameters can be configured in `configs/config.yaml`. Available para
     - Figures depicting data from the experiments `results/figures/`
 
 ## Citation
-The evaluation dataset, chunkers, and some simple utils are sourced from the Chroma research team's chunking evaluation framework [1].
+The evaluation dataset, chunkers, and some simple utils were sourced from the Chroma research team's chunking evaluation framework [1].
 
 ## References
 
